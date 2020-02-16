@@ -20,12 +20,13 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,6 +51,18 @@
 			++msb;
 		}
 
+	}
+
+	int _write( int file, char *ptr, int len){
+		return len;
+	}
+
+	int _write_swv(int file, char *ptr, int len){
+
+		for ( int i=0; i < len ; i++){
+			ITM_SendChar(*ptr++);
+		}
+		return len;
 	}
 /* USER CODE END PM */
 
@@ -99,6 +112,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
@@ -111,9 +125,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
-	  HAL_Delay(1000);
-	  foo();
+	  _write_swv(32, "Hello", 5);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
